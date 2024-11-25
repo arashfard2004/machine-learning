@@ -1,0 +1,56 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+diabet_dataset=pd.read_csv('diabetes.csv')
+x = diabet_dataset.drop(columns='Outcome',axis=1)
+y= diabet_dataset['Outcome']
+scaler = StandardScaler()
+standardized_data = scaler.fit_transform(x)
+print(standardized_data)
+x=standardized_data
+x_train,x_test,y_train,y_test = train_test_split(x,y, test_size=0.2 , random_state=2)
+classifier = svm.SVC(kernel='linear')
+classifier.fit(x_train,y_train)
+x_train_prediction = classifier.predict(x_train)
+x_test_prediction = classifier.predict(x_test)
+
+train_data_acuracy = accuracy_score(x_train_prediction,y_train)
+test_data_acuracy = accuracy_score(x_test_prediction,y_test)
+print("train_data_acuracy =",train_data_acuracy)
+print('test_data_acuracy = ', test_data_acuracy)
+
+columns = [
+    "Pregnancies",
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+]
+
+print(columns)
+
+i=-1
+
+input_data = [input(f"Enter your {columns[i]}: ") for _ in range(30) if (i := i + 1) <= len(columns)]
+
+input_data= [item.strip() for item in input_data]
+
+input_data = [float(item) for item in input_data]
+#changing imput data to a numpy array
+input_data_np_array = np.asanyarray(input_data)
+input_data_reshape = input_data_np_array.reshape(1,-1)
+
+#standardizing data
+std_data = scaler.transform(input_data_reshape)
+
+prediction = modle.predict(std_data)
+if (prediction[0]== 0):
+  print("the person is diabetic ")
+else:
+   print("the person is not  diabetic ")
